@@ -3,6 +3,7 @@ const http = require("http");
 const app = express();
 const path = require("path");
 const server = http.createServer(app);
+const moment = require("moment");
 
 // node modules에서 socket.io를 불러옴
 const socketIO = require("socket.io");
@@ -14,7 +15,13 @@ const PORT = process.env.PORT || 5000;
 
 io.on("connection", (socket) => {
   socket.on("chatting", (data) => {
-    io.emit("chatting", data);
+    const { name, msg } = data;
+    io.emit("chatting", {
+      name: name,
+      msg: msg,
+      // time: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+      time: moment(new Date()).format("h:ss A"),
+    });
   });
 });
 
